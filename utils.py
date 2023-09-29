@@ -13,8 +13,8 @@ def plot_location(p, v):
 
     ax.scatter(0,0,0, zdir='z', c='r', s=10, label='Objective')
     ax.legend()
-    ax.set_xlim(-44, 55)
-    ax.set_ylim(0, 55)
+    ax.set_xlim(-55, 55)
+    ax.set_ylim(-55, 55)
     ax.set_zlim(0, 105)
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
