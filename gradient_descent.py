@@ -7,7 +7,7 @@ import numpy as np
 e_3 = torch.tensor([0., 0., 1.])
 
 
-def optimize(env, agent, loss, optim, iters=10000):
+def optimize(env, agent, loss, optim, scheduler=None, iters=10000, verbose=True):
     for i in range(iters):
         f = agent()
         p, v = env(f)
@@ -19,9 +19,13 @@ def optimize(env, agent, loss, optim, iters=10000):
         torch.nn.utils.clip_grad_norm_(agent.parameters(), 10.)
         optim.step()
 
-        if i%100==0:
+        if scheduler is not None:
+            scheduler.step()
+
+        if verbose and i%100==0:
             l1 = l.item()
-            print(l1)
+            print(l1, scheduler.get_last_lr())
+
 
 
 
@@ -88,9 +92,37 @@ class ConstrainedLoss(nn.Module):
         l4 = 5*torch.linalg.vector_norm(p[-1])
 
         # final velocity error
-        l5 = 5*torch.linalg.vector_norm(v[-1])
+        l5 = 15*torch.linalg.vector_norm(v[-1])
 
         return l1 + l2 + l3 + l4 + l5
+    
+
+class ConstrainedLoss_v2(nn.Module):
+    def __init__(self, dt: float, gamma: float, F_max: float, alpha: float) -> None:
+        super().__init__()
+
+        self.dt = dt
+        self.gamma = gamma
+        self.F_max = F_max
+        self.alpha = alpha
+
+    def forward(self, f: Tensor, p: Tensor, v: Tensor):
+        norm = torch.linalg.vector_norm(f, dim=1)
+        
+        # constraint F less than F_max
+        l2 = 30*torch.sum(F.relu(norm-self.F_max))
+
+        # constraint alpha
+        l3 = torch.linalg.vector_norm(p[:, [0, 1]], dim=1) * self.alpha - p[:, 2]
+        l3 = 30*torch.sum(F.relu(l3))
+
+        # final destintation error
+        l4 = 5*torch.linalg.vector_norm(p[-1])
+
+        # final velocity error
+        l5 = 10*torch.linalg.vector_norm(v[-1])
+
+        return l2 + l3 + l4 + l5
 
 
 class CostLoss(nn.Module):
