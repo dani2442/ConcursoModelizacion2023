@@ -18,11 +18,11 @@ def estrellato(env: Environment, Fmax: int) -> int:
         p+=v*env.dt + a*env.dt**2/2
         v+=a*env.dt
         c=pre_p*p
-        if(c[0]<0):
+        if(c[0]<=0):
             visto[0]=True
-        if(c[1]<0):
+        if(c[1]<=0):
             visto[1]=True
-        if(c[2]<0):
+        if(c[2]<=0):
             visto[2]=True
     return k
     
