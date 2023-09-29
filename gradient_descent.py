@@ -76,17 +76,17 @@ class ConstrainedLoss(nn.Module):
         l1 = self.gamma*self.dt*torch.sum(norm)
         
         # constraint F less than F_max
-        l2 = torch.sum(F.relu(norm-self.F_max))
+        l2 = 10*torch.sum(F.relu(norm-self.F_max))
 
         # constraint alpha
         l3 = torch.linalg.vector_norm(p[:, [1, 2]], dim=1) * self.alpha - p[:, 0]
-        l3 = torch.sum(F.relu(l3))
+        l3 = 10*torch.sum(F.relu(l3))
 
         # final destintation error
-        l4 = torch.linalg.vector_norm(p[-1])
+        l4 = 5*torch.linalg.vector_norm(p[-1])
 
         # final velocity error
-        l5 = torch.linalg.vector_norm(v[-1])
+        l5 = 5*torch.linalg.vector_norm(v[-1])
 
         return l1 + l2 + l3 + l4 + l5
 
