@@ -92,7 +92,7 @@ class ConstrainedLoss(nn.Module):
         l4 = 5*torch.linalg.vector_norm(p[-1])
 
         # final velocity error
-        l5 = 15*torch.linalg.vector_norm(v[-1])
+        l5 = 20*torch.linalg.vector_norm(v[-1])
 
         return l1 + l2 + l3 + l4 + l5
     
@@ -120,7 +120,7 @@ class ConstrainedLoss_v2(nn.Module):
         l4 = 5*torch.linalg.vector_norm(p[-1])
 
         # final velocity error
-        l5 = 10*torch.linalg.vector_norm(v[-1])
+        l5 = 20*torch.linalg.vector_norm(v[-1])
 
         return l2 + l3 + l4 + l5
 

@@ -10,7 +10,7 @@ def plot_location(f, p, v, lambd = 0.5):
         v = v.detach().numpy()
         f = f.detach().numpy()
 
-    ax = plt.figure().add_subplot(projection='3d')
+    ax = plt.figure(figsize=(15,15)).add_subplot(projection='3d')
     ax.plot(p[:,0], p[:,1], p[:,2], zdir='z', label='Trajectory')
     ax.scatter(p[:,0], p[:,1], p[:,2], zdir='z')
 
@@ -29,4 +29,5 @@ def plot_location(f, p, v, lambd = 0.5):
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
 
+    plt.savefig("images/optimal.pdf", format="pdf", bbox_inches="tight")
     plt.show()
