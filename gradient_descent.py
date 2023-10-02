@@ -60,7 +60,7 @@ class Environment(nn.Module):
         p[0] = self.p_0 + (self.dt/2)*(v[0] + self.v_0)
 
         for i in range(0, K-1):
-            v[i+1] = v[i] + (self.dt/self.m)*f[i] - self.dt*self.g*e_3
+            v[i+1] = v[i] + (self.dt/self.m)*f[i+1] - self.dt*self.g*e_3
             p[i+1] = p[i] + (self.dt/2)*(v[i+1] + v[i])
 
         return p, v
